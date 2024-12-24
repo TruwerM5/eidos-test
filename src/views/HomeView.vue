@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
 import { ref, onMounted, computed, watch } from 'vue';
-import { RouterLink, useRoute, useRouter } from 'vue-router';
-import { onBeforeRouteUpdate } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import { useSessionsStore } from '@/stores/sessions';
+import CreateSesstionVue from '@/components/CreateSesstionVue.vue'
 import StatusVue from '@/components/StatusVue.vue';
-type Status = 'done'|'pending'|'planning';
+
 
 const tableButtons = [
   {
@@ -28,97 +29,7 @@ const tableButtons = [
   }
 ];
 
-const placeholderData = [
-  {
-    id: 1,
-    date: '15.07.2023, 12:00 - 13:00',
-    status: <Status>('planning'),
-    lesson: 'Ультразвуковое исследование органов брюшной полости и забрюшинного пространства',
-    type: 'Урок',
-    room: 'Комната 5, Комната 6, Комната 7',
-    group: 'ТП-31'
-  }, {
-    id: 2,
-    date: '15.07.2023, 13:00- 14:00',
-    status: <Status>('planning'),
-    lesson: 'Ультразвуковое абдоминальное исследование мочевого пузыря (для мужчин) и предстательной железы',
-    type: 'Аккредитация',
-    room: 'Комната 6',
-    group: '420-11КС'
-  }, {
-    id: 3,
-    date: '14.07.2023, 12:00-13:00',
-    status: <Status>('planning'),
-    lesson: 'Реанимация новорожденных',
-    type: 'Урок',
-    room: 'Комната 1, Комната 2',
-    group: '240011С'
-  }, {
-    id: 4,
-    date: '05.06.2023, 13:00-14:00',
-    status: <Status>('pending'),
-    lesson: 'Акушерство и гинекология',
-    type: 'Экзамен',
-    room: 'Комната 6',
-    group: 'ТП-31'
-  }, {
-    id: 5,
-    date: '05.06.2023, 12:00-13:00',
-    status: <Status>('done'),
-    lesson: 'Ультразвуковое абдоминальное исследование мочевого пузыря (для мужчин) и предстательной железы',
-    type: 'Аккредитация',
-    room: 'Комната 6',
-    group: 'КЛ-98'
-  }, {
-    id: 6,
-    date: '05.06.2023, 11:00-12:00',
-    status: <Status>('done'),
-    lesson: 'Ультразвуковое абдоминальное исследование мочевого пузыря (для мужчин) и предстательной железы',
-    type: 'Аккредитация',
-    room: 'Комната 6',
-    group: '410011С'
-  }, {
-    id: 7,
-    date: '04.06.2023, 12:00-13:00',
-    status: <Status>('done'),
-    lesson: 'Базовые навыки в ультразвуковом иследовании',
-    type: 'Урок',
-    room: 'Комната 6',
-    group: 'КЛ-98'
-  },{
-    id: 8,
-    date: '03.06.2023, 13:00-14:00',
-    status: <Status>('done'),
-    lesson: 'Реанимация новорожденных',
-    type: 'Экзамен',
-    room: 'Комната 1, Комната 2, Комната 3, Комната 4',
-    group: '240-11КС'
-  },{
-    id: 9,
-    date: '02.06.2023, 13:00-14:00',
-    status: <Status>('done'),
-    lesson: 'Ультразвуковое абдоминальное исследование мочевого пузыря (для мужчин) и предстательной железы',
-    type: 'Аккредитация',
-    room: 'Комната 6',
-    group: '410011С'
-  },{
-    id: 10,
-    date: '02.06.2023, 13:00-14:00',
-    status: <Status>('done'),
-    lesson: 'Акушерство и гинекология',
-    type: 'Урок',
-    room: 'Комната 6',
-    group: '120-11КС'
-  },{
-    id: 11,
-    date: '02.06.2023, 13:00-14:00',
-    status: <Status>('done'),
-    lesson: 'Базовые навыки в ультразвуковом иследовании',
-    type: 'Урок',
-    room: 'Комната 6',
-    group: 'КЛ-98'
-  },
-];
+const sessionsStore = useSessionsStore();
 
 const search = ref('');
 const route = useRoute();
@@ -129,7 +40,7 @@ onMounted(() => {
   router.push({ query: { page: currentPage.value }});
 });
 const selectedData = computed(() => {
-  return placeholderData.slice((currentPage.value-1) * 10, (currentPage.value - 1) * 10 + 10);
+  return sessionsStore.sessions.slice((currentPage.value-1) * 10, (currentPage.value - 1) * 10 + 10);
 });
 
 const filteredData = computed(() => {
@@ -216,7 +127,8 @@ function sortData(id: number) {
             class="text-[#2F3144A6]" 
           />
         </button>
-        <button class="text-[15px] text-white font-[800] py-[10px] px-[24px] rounded-[12px] bg-[#3761F3]">
+        <button @click="sessionsStore.toggleForm"
+          class="text-[15px] text-white font-[800] py-[10px] px-[24px] rounded-[12px] bg-[#3761F3]">
           Создать
         </button>
       </div>
@@ -280,7 +192,7 @@ function sortData(id: number) {
       </button>
     </div>
   </div>
-  
+  <CreateSesstionVue v-if="sessionsStore.isFormOpened" />
 </template>
 
 <style scoped>
