@@ -11,11 +11,11 @@ type Lang = {
 const langs = [
     {
         id: 1,
-        img: '/images/rus.png',
+        img: '/eidos-test/images/rus.png',
         title: 'Русский'
     },{
         id: 2,
-        img: '/images/eng.png',
+        img: '/eidos-test/images/eng.png',
         title: 'Английский'
     },
 ];
