@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  height: 100vh;
+  background-color: #f4f4f4;
+  font-family: 'Manrope';
+  color: #2F3144;
+}
+
+button {
+  height: 100%;
+  cursor: pointer;
+}
+
+
+/* TRANSITIONS */
+.hide-enter-active,
+.hide-leave-active {
+    transition: all .5s;
+}
+
+.hide-leave-to,
+.hide-enter-from {
+    font-size: 0;
+    width: 0;
+    opacity: 0;
+}
+
+.page-button {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px;
+  background-color: #fff;
+  border-radius: 8px;
+  color: #2F3144;
+  font-size: 15px;
+  border: 1px solid #fff;
+}
+
+.page-button.active {
+  color: #3761F3;
+  border-color: #3761F3;
+}
